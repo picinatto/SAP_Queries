@@ -17,10 +17,11 @@ SELECT
 		t0.SumApplied,
 		t0.OcrCode
 
-FROM	VPM4 t0
-		INNER JOIN OVPM t1 ON t1.DocNum	  = t0.DocNum		--JOIN CABECALHO
+FROM	RCT4 t0
+		INNER JOIN ORCT t1 ON t1.DocNum	  = t0.DocNum	--Join cabeçalho recebimentos
 
 WHERE 
 			t1.Canceled = 'N' 
 		AND t1.DocType  = 'A'
-		AND LEFT(t0.AcctCode,7)<>'1.01.01'
+		AND LEFT(t0.AcctCode,7) <> '1.01.01' -- Excluir transferências entre contas da empresa
+		AND LEFT(t0.AcctCode,10)<>'1.01.03.07' -- Exclui transferências de valores do acerto dos vendedores

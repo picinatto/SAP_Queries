@@ -27,10 +27,10 @@ SELECT
 		t3.OcrCode
 
 FROM	VPM2 t0
-		INNER JOIN OVPM t1 ON t1.DocNum	  = t0.DocNum		--JOIN CABECALHO
-		LEFT JOIN  OJDT t2 ON t2.TransId  = t0.DocTransId	--JOIN CABECALHO LCTO CONTABIL
-		LEFT JOIN (SELECT TransId, Account, ProfitCode AS OcrCode, Debit, Credit 
-					FROM JDT1 WHERE Account <> '2.01.01.01.01') t3 ON t3.TransId = t2.TransId   --JOIN LINHA LCTO CONTABIL
+		INNER JOIN OVPM t1 ON t1.DocNum	  = t0.DocNum		--Join cabeçalho pagamentos
+		LEFT JOIN  OJDT t2 ON t2.TransId  = t0.DocTransId	--Join cabeçalho lançamentos ctbeis
+		LEFT JOIN (SELECT TransId, Account, ProfitCode AS OcrCode, Debit, Credit -- Join cabeçalho lançamentos ctbeis
+					FROM JDT1 WHERE Account <> '2.01.01.01.01') t3 ON t3.TransId = t2.TransId   --Filtrar créditos dos forncedores
 
 WHERE		t1.Canceled = 'N'
 		AND t1.DocType <> 'A'

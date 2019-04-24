@@ -18,9 +18,9 @@ SELECT
 		t0.OcrCode
 
 FROM	VPM4 t0
-		INNER JOIN OVPM t1 ON t1.DocNum	  = t0.DocNum		--JOIN CABECALHO
+		INNER JOIN OVPM t1 ON t1.DocNum	  = t0.DocNum --Join cabeçalho
 
 WHERE 
 			t1.Canceled = 'N' 
 		AND t1.DocType  = 'A'
-		AND LEFT(t0.AcctCode,7)<>'1.01.01'
+		AND LEFT(t0.AcctCode,7)<>'1.01.01' --Filtrar transferências entre contas da empresa
