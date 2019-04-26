@@ -1,5 +1,3 @@
-SELECT t1.AcctName, t1.AcctCode, SUM(t0.SumApplied) AS VALOR FROM (
-
 SELECT 
 		t1.DocNum,
 		t0.InvoiceId AS LineId,
@@ -28,18 +26,13 @@ SELECT
 				AS SumApplied,
 		t3.OcrCode
 
-FROM	RCT2 t0
+	FROM	RCT2 t0
 		INNER JOIN ORCT t1 ON t1.DocNum	  = t0.DocNum		--Join cabeçalho pagamentos
 		LEFT JOIN  OJDT t2 ON t2.TransId  = t0.DocTransId	--Join cabeçalho lançamentos ctbeis
 		LEFT JOIN (SELECT TransId, Account, ProfitCode AS OcrCode, Debit, Credit -- Join cabeçalho lançamentos ctbeis
 					FROM JDT1 WHERE Account <> '1.01.03.01.01') t3 ON t3.TransId = t2.TransId   --Filtrar créditos dos forncedores
 		
-WHERE		t1.Canceled = 'N' -- Verifica se o documento foi cancelado
+	WHERE		t1.Canceled = 'N' -- Verifica se o documento foi cancelado
 		AND t1.CashSum + t1.CheckSum + t1.TrsfrSum > 0 -- Verifica se a baixa de compensação (sem financeiro)
 		AND t1.DocType <> 'A' -- Verifica se o documento é orinada de conta ou fonrcedor / cliente
 		AND (t0.InvType <> 13 AND t0.InvType <> 14) -- Verifica se o documento é de nota fiscal ou devolucao de nota fiscal
-
-) t0 
-INNER JOIN OACT t1 ON t0.AccountCode = t1.AcctCode
-GROUP BY t1.AcctName, t1.AcctCode
-ORDER BY VALOR DESC

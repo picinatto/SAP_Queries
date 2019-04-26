@@ -1,5 +1,3 @@
-SELECT t1.AcctName, t1.AcctCode, SUM(t0.SumApplied) AS VALOR FROM (
-
 SELECT 
 		t1.DocNum,
 		t0.InvoiceId AS LineId,
@@ -27,7 +25,7 @@ SELECT
 		t3.OcrCode,
 		Distribuidor
 
-FROM	RCT2 t0
+	FROM	RCT2 t0
 		INNER JOIN ORCT t1 ON t1.DocNum	  = t0.DocNum		--Join cabeçalho pagamentos
 		LEFT JOIN (SELECT DocEntry, AcctCode AS AccountCode, LineTotal, OcrCode FROM INV1 ) t3 ON t3.DocEntry = t0.DocEntry --Join linha nota fiscal
         LEFT JOIN (SELECT OINV.DocEntry, MAX(distribuidor.Distribuidor) AS Distribuidor FROM OINV
@@ -35,13 +33,8 @@ FROM	RCT2 t0
 								FROM INV1) distribuidor ON distribuidor.DocEntry = OINV.DocEntry
                     			GROUP BY OINV.DocEntry) t4 ON t4.DocEntry = t0.DocEntry
 		
-WHERE		t1.Canceled = 'N' -- Verifica se o documento foi cancelado
+	WHERE		t1.Canceled = 'N' -- Verifica se o documento foi cancelado
 		AND t1.CashSum + t1.CheckSum + t1.TrsfrSum > 0 -- Verifica se a baixa de compensação (sem financeiro)
 		AND t1.DocType <> 'A' -- Verifica se o documento é orinada de conta ou fonrcedor / cliente
         AND t4.Distribuidor <> 1 -- Verifica se é uma venda feita pelo distribuidor para desconsiderar
 		AND t0.InvType = 14 -- Verifica se o documento é de nota fiscal ou devolucao de nota fiscal
-
-) t0 
-INNER JOIN OACT t1 ON t0.AccountCode = t1.AcctCode
-GROUP BY t1.AcctName, t1.AcctCode
-ORDER BY VALOR DESC

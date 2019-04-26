@@ -17,10 +17,10 @@ SELECT
 		t0.SumApplied,
 		t0.OcrCode
 
-FROM	RCT4 t0
+	FROM	RCT4 t0
 		INNER JOIN ORCT t1 ON t1.DocNum	  = t0.DocNum	--Join cabeçalho recebimentos
 
-WHERE 
+	WHERE 
 			t1.Canceled = 'N' -- Verifica se o documento foi cancelado
 		AND t1.CashSum + t1.CheckSum + t1.TrsfrSum > 0 -- Verifica se a baixa de compensação (sem financeiro)
 		AND t1.DocType  = 'A' -- Verifica se o documento é orinada de conta ou fonrcedor / cliente
