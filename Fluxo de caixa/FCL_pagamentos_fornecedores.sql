@@ -22,7 +22,7 @@ SELECT
 							AND Account <> '2.01.01.01.01'
 				)
 		) 
-				* t0.SumApplied  --Multiplicado pelo valor da baixa 
+				* - t0.SumApplied  --Multiplicado pelo valor da baixa 
 				AS SumApplied,
 		t3.OcrCode
 
@@ -32,6 +32,6 @@ FROM	VPM2 t0
 		LEFT JOIN (SELECT TransId, Account, ProfitCode AS OcrCode, Debit, Credit -- Join cabeçalho lançamentos ctbeis
 					FROM JDT1 WHERE Account <> '2.01.01.01.01') t3 ON t3.TransId = t2.TransId   --Filtrar créditos dos forncedores
 
-WHERE		t1.Canceled = 'N'
-		AND t1.CashSum + t1.CheckSum + t1.TrsfrSum > 0
-		AND t1.DocType <> 'A'
+WHERE		t1.Canceled = 'N' -- Verifica se o documento foi cancelado
+		AND t1.CashSum + t1.CheckSum + t1.TrsfrSum > 0 -- Verifica se a baixa de compensação (sem financeiro)
+		AND t1.DocType <> 'A' -- Verifica se o documento é orinada de conta ou fonrcedor / cliente

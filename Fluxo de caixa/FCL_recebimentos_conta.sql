@@ -21,8 +21,8 @@ FROM	RCT4 t0
 		INNER JOIN ORCT t1 ON t1.DocNum	  = t0.DocNum	--Join cabeçalho recebimentos
 
 WHERE 
-			t1.Canceled = 'N'
-		AND t1.CashSum + t1.CheckSum + t1.TrsfrSum > 0
-		AND t1.DocType  = 'A'
+			t1.Canceled = 'N' -- Verifica se o documento foi cancelado
+		AND t1.CashSum + t1.CheckSum + t1.TrsfrSum > 0 -- Verifica se a baixa de compensação (sem financeiro)
+		AND t1.DocType  = 'A' -- Verifica se o documento é orinada de conta ou fonrcedor / cliente
 		AND LEFT(t0.AcctCode,7) <> '1.01.01' -- Excluir transferências entre contas da empresa
-		AND LEFT(t0.AcctCode,10)<>'1.01.03.07' -- Exclui transferências de valores do acerto dos vendedores
+		AND LEFT(t0.AcctCode,10) <> '1.01.03.07' -- Exclui transferências de valores do acerto dos vendedores
