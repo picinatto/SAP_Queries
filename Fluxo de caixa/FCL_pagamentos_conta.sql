@@ -8,10 +8,10 @@ SELECT
 		t1.DocTotal,
 		t1.TransId AS DocTransId,
 		CASE
-			WHEN t1.CashAcct IS NOT NULL THEN t1.CashAcct
-			WHEN t1.CheckSum > 0		 THEN '1.01.01.03.01'
-			WHEN t1.BankAcct IS NOT NULL THEN t1.BankAcct
-			ELSE t1.TrsfrAcct
+			WHEN t1.CashSum  > 0 THEN t1.CashAcct
+			WHEN t1.CheckSum > 0 THEN '1.01.01.03.01'
+			WHEN t1.TrsfrSum > 0 THEN t1.TrsfrAcct
+			ELSE NULL
 			END AS PayAcct,
 		t0.AcctCode,
 		t0.SumApplied,
@@ -22,5 +22,6 @@ FROM	VPM4 t0
 
 WHERE 
 			t1.Canceled = 'N' 
+		AND t1.CashSum + t1.CheckSum + t1.TrsfrSum > 0
 		AND t1.DocType  = 'A'
 		AND LEFT(t0.AcctCode,7)<>'1.01.01' --Filtrar transferências entre contas da empresa
